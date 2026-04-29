@@ -2,8 +2,10 @@ import telebot
 import requests
 import os
 import time
+import threading
 from collections import defaultdict
 from dotenv import load_dotenv
+from http.server import HTTPServer, BaseHTTPRequestHandler
 
 load_dotenv()
 
@@ -18,6 +20,21 @@ flood_tracker = defaultdict(list)
 WARN_LIMIT = 3
 FLOOD_LIMIT = 5
 FLOOD_TIME = 5
+
+
+class Handler(BaseHTTPRequestHandler):
+    def do_GET(self):
+        self.send_response(200)
+        self.end_headers()
+        self.wfile.write(b"Bot is running!")
+    def log_message(self, format, *args):
+        pass
+
+
+def run_server():
+    port = int(os.environ.get("PORT", 8080))
+    server = HTTPServer(("0.0.0.0", port), Handler)
+    server.serve_forever()
 
 
 def is_admin(chat_id, user_id):
@@ -202,4 +219,5 @@ def help_cmd(message):
 
 
 print("✅ মডারেটর বট চালু হয়েছে...")
+threading.Thread(target=run_server, daemon=True).start()
 bot.infinity_polling()
