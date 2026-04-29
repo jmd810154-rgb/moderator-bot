@@ -9,7 +9,7 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 
 load_dotenv()
 
-BOT_TOKEN = os.getenv("BOT_TOKEN")
+BOT_TOKEN = os.getenv("BOT_TOKEN", "8079873561:AAF5DHBefT5afaaVGMrJV-VDKei4ljy7mU0")
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
 bot = telebot.TeleBot(BOT_TOKEN)
